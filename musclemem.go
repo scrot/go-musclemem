@@ -27,7 +27,7 @@ const (
 	headerRetryAfter = "Retry-After"
 )
 
-type client struct {
+type Client struct {
 	baseURL *url.URL
 	apiKey  string
 
@@ -36,7 +36,7 @@ type client struct {
 	Exercises *exerciseService
 }
 
-func newClient(baseURL string, apiKey string) (*client, error) {
+func NewClient(baseURL string, apiKey string) (*Client, error) {
 	url, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func newClient(baseURL string, apiKey string) (*client, error) {
 		return nil, errors.New("no api key provided")
 	}
 
-	c := &client{
+	c := &Client{
 		baseURL: url,
 		apiKey:  apiKey,
 	}
@@ -59,14 +59,14 @@ func newClient(baseURL string, apiKey string) (*client, error) {
 }
 
 type service struct {
-	client *client
+	client *Client
 }
 
 // TODO: extend with request options
 type requestOption func(r *http.Request)
 
 // send sends handles requests to the musclemem api
-func (c *client) send(
+func (c *Client) send(
 	ctx context.Context,
 	method string,
 	path string,
